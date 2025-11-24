@@ -5,6 +5,8 @@ import streamlit as st
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 # ---------- App config ----------
 st.set_page_config(page_title="Interview Chatbot", page_icon="💬")
 st.title("Interview Chatbot — TinyLlama (CPU)")
