@@ -9,6 +9,8 @@ import torch
 st.set_page_config(page_title="Interview Chatbot", page_icon="💬")
 st.title("Interview Chatbot — TinyLlama (CPU)")
 
+hf_token = st.secrets["HUGGINGFACE_API_KEY"]
+
 # ---------- Setup UI state ----------
 if "setup_complete" not in st.session_state:
     st.session_state.setup_complete = False
@@ -49,8 +51,15 @@ if not st.session_state.setup_complete:
 # ---------- MODEL LOADER (cached) ----------
 @st.cache_resource
 def load_model(model_name="TinyLlama/TinyLlama-1.1B-Chat-v1.0"):
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForCausalLM.from_pretrained(model_name)
+    hf_token = st.secrets["HUGGINGFACE_API_KEY"]
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_name,
+        use_auth_token=hf_token
+    )
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        use_auth_token=hf_token
+    )
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     if getattr(model.config, "pad_token_id", None) is None:
